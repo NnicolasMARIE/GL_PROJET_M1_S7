@@ -1,0 +1,35 @@
+class ControleurDispenseur
+
+instance variables
+
+private ID: nat;
+private Type: Controleur`typeActeur;
+
+
+operations
+
+public ControleurDispenseur: nat * Controleur`typeActeur ==> ControleurDispenseur
+	ControleurDispenseur(id,type) ==
+		(  
+			ID:= id;
+			Type:= type;
+		);
+		
+private Algo: () ==> ()
+	Algo() ==
+		skip;
+
+private Lancement: ((nat*Controleur`typeMenace) * (int*int*int)) ==> ()
+	Lancement(destructionMenace) ==
+		skip;
+
+public Action: ((nat*Controleur`typeMenace) * (int*int*int)) ==> ()
+	Action(destructionMenace) == (
+
+		Algo();
+		Lancement(destructionMenace);
+		--si le lancement echou pour une raison quelquonque l'action est annulée est la menace n'est pas retiré de la liste 
+		SystemeRTP`Pilote.RmMenace(destructionMenace.#1.#1);
+	);
+
+end ControleurDispenseur

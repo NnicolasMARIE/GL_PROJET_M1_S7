@@ -1,0 +1,57 @@
+class Detecteur 
+--modelise un detecteur de menace
+instance variables
+	private identifiantM : nat  := 0;
+	private ID	: nat; -- identit� des capteurs
+	private Type	: Controleur`typeActeur;  --type des capteurs
+	protected periode : nat1 := 1;
+protected estPeriodique : bool := true;
+private Fini		: bool:=false; 
+
+operations
+
+public Detecteur: nat * Controleur`typeActeur* nat1*bool ==> Detecteur
+	Detecteur(id, type, T, estPeriodic) ==
+		(ID := id;
+		Type := type;
+		  periode :=T;
+  estPeriodique :=estPeriodic
+		);
+
+
+public estFini: () ==> ()
+estFini() == 
+  skip;
+
+public Finir: () ==> ()
+Finir() == 
+  Fini := true;
+
+public Action : () ==> ()
+	Action() == (
+
+		if SystemeRTP`leContexte.GetDetectionNouvelleMenace() 
+		then (
+			SystemeRTP`leContexte.SetNouvelleMenace(false);
+			if SystemeRTP`leContexte.GetDetectionTypeMenace() <> <NUL> 
+			then(
+				IO`print("\n detection missile ennemi de type : ");
+				IO`print(SystemeRTP`leContexte.GetDetectionTypeMenace());
+			SystemeRTP`Pilote.addMenace({identifiantM |->  SystemeRTP`leContexte.GetDetectionTypeMenace()});
+			identifiantM := identifiantM + 1    ;
+			)
+		)
+	)	
+thread
+ (while true 
+  do
+   (Action();
+   Animation`horloge.WaitRelatif(2);
+   )
+ )
+sync
+per estFini => Fini;
+-- per printStr => indicateur;
+		
+
+end Detecteur

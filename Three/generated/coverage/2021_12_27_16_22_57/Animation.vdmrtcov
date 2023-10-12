@@ -1,0 +1,42 @@
+class Animation
+
+
+instance variables
+--d�termine l'environnement
+public static env : [Environnement] := nil;
+
+
+operations
+
+public Animation: () ==> Animation
+Animation () ==
+-- instance SYSTEME D'ANIMATION
+ ( 
+  env := new Environnement("scenarioAnimation.txt");
+--lancer les threads de tous les acteurs 
+  start(SystemeRTP`CapteurLatitude1);
+  start(SystemeRTP`CapteurLongitude1);
+  start(SystemeRTP`CapteurDistance1);
+  start(SystemeRTP`Detecteur1);
+  start(SystemeRTP`Pilote);
+  start(SystemeRTP`ControleurDispenseur1);
+ );
+
+
+
+
+public Simuler: () ==> ()
+Simuler() ==
+ ( 
+ IO`print("\n Debut simulation");
+ --lancer la production des stimuli
+    start(env); 
+ -- attendre jusqu'au tarissement du flot de stimuli 
+    env.estFini();
+  -- afficher message fin  simulation 
+  IO`print("\n Simulation termin�e  � l'instant: ");
+  SystemeRTP`Pilote.Finir();
+ );
+
+
+end Animation

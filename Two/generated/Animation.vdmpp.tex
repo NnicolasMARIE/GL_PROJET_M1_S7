@@ -1,0 +1,44 @@
+\kClass $Animation$
+\par
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}\kw{private}
+\assdef{env}{Environnement}
+\end{insvar}
+\begin{insvar}\kw{public}\hspace{0.5em}\kw{static}
+\assdef{horloge}{TimeStamp}[{\fnapply{\new{TimeStamp}}{7}}]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{systemeRTP}{SystemeRTP}
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{Animation}%
+\signature{() \Oto Animation}
+\parms{}
+\annlab[o]{Animation`Animation}
+\begin{blockstmt}
+\ass{systemeRTP}{\fnapply{\new{SystemeRTP}}{}} ; \\
+\ass{env}{\fnapply{\new{Environnement}}{\Dquote scenarioAnimation.txt \Dquote ,1,\True }} ; \\
+\start{systemeRTP.CapteurLatitude1} ; \\
+\start{systemeRTP.CapteurLongitude1} ; \\
+\start{systemeRTP.CapteurDistance1} ; \\
+\start{systemeRTP.Detecteur1} ; \\
+\start{systemeRTP.Pilote} ; \\
+\start{systemeRTP.ControleurDispenseur1}
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Simuler}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Animation`Simuler}
+\begin{blockstmt}
+\call{IO`print}{\Dquote {\backslash}n\hspace{0.5em}Debut\hspace{0.5em}simulation \Dquote } ; \\
+\start{env} ; \\
+$env$.\call{estFini}{} ; \\
+\call{IO`print}{\Dquote {\backslash}n\hspace{0.5em}Simulation\hspace{0.5em}termin�e\hspace{0.5em}\hspace{0.5em}�\hspace{0.5em}l\Quote instant:\hspace{0.5em} \Dquote } ; \\
+\call{IO`print}{\fnapply{horloge.GetTime}{}}
+\end{blockstmt}
+\end{op}
+\kEnd $Animation$
+

@@ -1,0 +1,14 @@
+class SystemeRTP
+-- classe qui configure le systeme: Pilote + 3 capteur + dispenseur + detecteur
+instance variables
+public static leContexte		: Contexte := new Contexte();
+--cree des instances "public static" pour permettre l'acces a partir de toutes les classes du modele  
+public static  Pilote	: Controleur := new Controleur(3,true);  -- un seul systeme de pilotage qui 
+public static CapteurLatitude1	: CapteurLatitude := new CapteurLatitude(1, <CAPTEUR_LATITUDE>,{|->},leContexte,5,true);  -- un seul capteur de latitude
+public static CapteurLongitude1	: CapteurLongitude := new CapteurLongitude(2, <CAPTEUR_LONGITUDE>,{|->},leContexte,5,true);  -- un seul capteur de longitude
+public static CapteurDistance1	: CapteurDistance := new CapteurDistance(3, <CAPTEUR_DISTANCE>, {|->},leContexte,5,true); -- un seul capteur de distance
+public static ControleurDispenseur1	: ControleurDispenseur := new ControleurDispenseur(4, <CONTROLEUR_DISPENSEUR>,2,true); -- un seul dispenseur
+public static Detecteur1	: Detecteur := new Detecteur(5, <DETECTEUR>,5,true); -- un seul detecteur
+
+
+end SystemeRTP

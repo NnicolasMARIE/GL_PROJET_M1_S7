@@ -1,0 +1,123 @@
+\kClass $Environnement$
+\par
+\kTypes
+\type{\kw{public}\hspace{0.5em}data}{\Nat  \Mult \Bool  \Mult Controleur`typeMenace \Mult \Nat  \Mult \Int  \Mult \Int  \Mult \Int }
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}\kw{protected}
+\assdef{periode}{\Natone }[{1}]
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{estPeriodique}{\Bool }[{\True }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{io}{IO}[{\fnapply{\new{IO}}{}}]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{datas}{\seqof*{data}}[{\seq{}}]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{DureeSimulation}{\Nat }[{0}]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{fini}{\Bool }[{\False }]
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{Environnement}%
+\signature{\seqof*{\Char } \Mult \Natone  \Mult \Bool  \Oto Environnement}
+\parms{fichierData,p,estP}
+\annlab[o]{Environnement`Environnement}
+\begin{blockstmt}
+\ass{periode}{p} ; \\
+\ass{estPeriodique}{estP} ; \\
+\begin{letstmt}
+\patdef{\reccons{\kw{mk\textunderscore}}{\DoNotCare,\reccons{\kw{mk\textunderscore}}{t,input}}}{\fnapply{io.freadval[\Nat  \Mult \seqof*{data}]}{fichierData}}
+\end{letstmt} \\
+\begin{blockstmt}
+\ass{datas}{input} ; \\
+\ass{DureeSimulation}{t}
+\end{blockstmt}
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{estFini}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Environnement`estFini}
+\Skip ;
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Finir}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Environnement`Finir}
+\ass{fini}{\True };
+\end{op}
+\kw{\kw{private}}\begin{op}[e]{stimuli}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Environnement`stimuli}
+\begin{blockstmt}
+\If  \Len datas \NumGt 0
+\Then \\
+\begin{blockstmt}
+\begin{dclstmt}
+\assdef{dateActuelle}{\Nat }[{\fnapply{Animation`horloge.GetTime}{}}]
+\end{dclstmt}
+\begin{letstmt}
+\patdef{\reccons{\kw{mk\textunderscore}}{date,Ndetect,Me,id,dis,lon,lat}}{ \Hd datas}
+\end{letstmt} \\
+\begin{blockstmt}
+\If date \Le dateActuelle
+\Then \\
+\begin{blockstmt}
+SystemeRTP`leContexte.\call{Setdis}{\map{id \Mapsto dis}} ; \\
+SystemeRTP`leContexte.\call{Setlon}{\map{id \Mapsto lon}} ; \\
+SystemeRTP`leContexte.\call{Setlat}{\map{id \Mapsto lat}} ; \\
+SystemeRTP`leContexte.\call{SetNouvelleMenace}{Ndetect} ; \\
+SystemeRTP`leContexte.\call{SetTypeMenace}{Me} ; \\
+\ass{datas}{ \Tl datas} ; \\
+\return{\mbox{}}
+\end{blockstmt}
+\Fi
+\end{blockstmt}
+\end{blockstmt}
+\Else \\
+\begin{blockstmt}
+\ass{fini}{\True } ; \\
+\return{\mbox{}}
+\end{blockstmt}
+\Fi
+\end{blockstmt};
+\end{op}
+\kw{\kw{protected}}\begin{op}[e]{Action}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Environnement`Action}
+\begin{blockstmt}
+\If \fnapply{Animation`horloge.GetTime}{} \NumLt DureeSimulation
+\Then \\
+\call{stimuli}{}
+\Else \\
+\ass{fini}{\True }
+\Fi
+\end{blockstmt}
+\end{op}
+\kThreadDef
+\begin{thread}
+\begin{blockstmt}
+\begin{while}{\fnapply{Animation`horloge.GetTime}{} \NumLt DureeSimulation}
+\begin{blockstmt}
+\If  \Not fini
+\Then \\
+\call{stimuli}{}
+\Fi ; \\
+Animation`horloge.\call{WaitRelatif}{1}
+\end{blockstmt}
+\end{while} ; \\
+\ass{fini}{\True }
+\end{blockstmt}
+\end{thread}
+\kSync
+\per{estFini}{fini}
+\kEnd $Environnement$
+

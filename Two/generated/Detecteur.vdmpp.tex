@@ -1,0 +1,84 @@
+\kClass $Detecteur$
+\par
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}\kw{private}
+\assdef{identifiantM}{\Nat }[{0}]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{ID}{\Nat }
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{Type}{Controleur`typeActeur}
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{periode}{\Natone }[{1}]
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{estPeriodique}{\Bool }[{\True }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{Fini}{\Bool }[{\False }]
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{Detecteur}%
+\signature{\Nat  \Mult Controleur`typeActeur \Mult \Natone  \Mult \Bool  \Oto Detecteur}
+\parms{id,type,T,estPeriodic}
+\annlab[o]{Detecteur`Detecteur}
+\begin{blockstmt}
+\ass{ID}{id} ; \\
+\ass{Type}{type} ; \\
+\ass{periode}{T} ; \\
+\ass{estPeriodique}{estPeriodic}
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{estFini}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Detecteur`estFini}
+\Skip ;
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Finir}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Detecteur`Finir}
+\ass{Fini}{\True };
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Action}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Detecteur`Action}
+\begin{blockstmt}
+\If \fnapply{SystemeRTP`leContexte.GetDetectionNouvelleMenace}{}
+\Then \\
+\begin{blockstmt}
+SystemeRTP`leContexte.\call{SetNouvelleMenace}{\False } ; \\
+\If \fnapply{SystemeRTP`leContexte.GetDetectionTypeMenace}{} \Neq \const{NUL}
+\Then \\
+\begin{blockstmt}
+\call{IO`print}{\Dquote {\backslash}n\hspace{0.5em}detection\hspace{0.5em}missile\hspace{0.5em}ennemi\hspace{0.5em}de\hspace{0.5em}type\hspace{0.5em}:\hspace{0.5em} \Dquote } ; \\
+\call{IO`print}{\fnapply{SystemeRTP`leContexte.GetDetectionTypeMenace}{}} ; \\
+SystemeRTP`Pilote.\call{addMenace}{\map{identifiantM \Mapsto \fnapply{SystemeRTP`leContexte.GetDetectionTypeMenace}{}}} ; \\
+\ass{identifiantM}{identifiantM \Plus 1}
+\end{blockstmt}
+\Fi
+\end{blockstmt}
+\Fi
+\end{blockstmt}
+\end{op}
+\kThreadDef
+\begin{thread}
+\begin{blockstmt}
+\begin{while}{\True }
+\begin{blockstmt}
+\call{Action}{} ; \\
+Animation`horloge.\call{WaitRelatif}{2}
+\end{blockstmt}
+\end{while}
+\end{blockstmt}
+\end{thread}
+\kSync
+\per{estFini}{Fini}
+\kEnd $Detecteur$
+

@@ -1,0 +1,16 @@
+class CapteurLongitude is subclass of Capteur
+--modelise un capteur de pression
+operations
+
+public CapteurLongitude: nat * Controleur`typeActeur * map nat to int ==> CapteurLongitude
+	CapteurLongitude(id, type, val) ==
+		(ID := id;
+		Type := type;
+		Valeur := val;
+		);
+-- Action du Capteur:  "mesurer la latitude des missiles de l'environnement"
+public Action: () ==> ()
+	Action() ==
+		(Valeur := Animation`env.Readlon();
+		);
+end CapteurLongitude

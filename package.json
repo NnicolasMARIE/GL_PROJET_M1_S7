@@ -1,0 +1,26 @@
+{
+  "name": "genielogiciel",
+  "homepage": "https://github.com/r0m1ntik/GL_PROJET_M1_S7#readme",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "node start.js"
+  },
+  "description": "Projet du 1 au 3 (Temps réel) pour le semestre 7 de l'année 2021-22 M1 TI",
+  "version": "1.0.0",
+  "main": "start.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/r0m1ntik/GL_PROJET_M1_S7.git"
+  },
+  "author": "r0m1ntik",
+  "bugs": {
+    "url": "https://github.com/r0m1ntik/GL_PROJET_M1_S7/issues"
+  },
+  "dependencies": {
+    "axios": "^0.21.4",
+    "cowsay": "^1.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0"
+  }
+}

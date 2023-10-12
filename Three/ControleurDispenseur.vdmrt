@@ -1,0 +1,73 @@
+class ControleurDispenseur
+
+instance variables
+
+private ID: nat;
+private Type: Controleur`typeActeur;
+private ennemi: (nat*Controleur`typeMenace) * (int*int*int);
+private act :bool := false;
+private Fini		: bool:=false; 
+
+
+
+
+
+operations
+
+public ControleurDispenseur: nat * Controleur`typeActeur ==> ControleurDispenseur
+	ControleurDispenseur(id,type) ==
+		(  
+			ID:= id;
+			Type:= type;
+		);
+		
+
+private Algo: () ==> ()
+	Algo() ==
+		skip;
+
+private Lancement: () ==> ()
+	Lancement() ==
+	(
+		IO`print("\n destruction du missile n:");
+		IO`print(ennemi.#1.#1);
+		IO`print("\n de type :");
+		IO`print(ennemi.#1.#2);
+	);
+public Action: () ==> ()
+	Action() == (
+		if (act=true)
+		then(
+		act:=false;
+		Algo();
+		Lancement();
+		--si le lancement echou pour une raison quelquonque l'action est annulée est la menace n'est pas retiré de la liste 
+		SystemeRTP`Pilote.RmMenace(ennemi.#1.#1);
+		)
+
+	);
+public SetEnnemi :((nat*Controleur`typeMenace) * (int*int*int)) ==>()
+	SetEnnemi(aAbatre) == (
+		ennemi:= aAbatre;
+		act:= true;
+	);
+
+public estFini: () ==> ()
+estFini() == 
+  skip;
+
+public Finir: () ==> ()
+Finir() == 
+  Fini := true;
+  
+  
+sync
+ per estFini => Fini;
+
+thread
+
+periodic(1000E6,0,0,0) (Action)
+
+
+
+end ControleurDispenseur

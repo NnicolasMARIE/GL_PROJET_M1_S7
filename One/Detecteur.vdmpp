@@ -1,0 +1,33 @@
+class Detecteur 
+--modelise un detecteur de menace
+instance variables
+	private identifiantM : nat  := 0;
+	private ID	: nat; -- identit� des capteurs
+	private Type	: Controleur`typeActeur;  --type des capteurs
+
+operations
+
+public Detecteur: nat * Controleur`typeActeur ==> Detecteur
+	Detecteur(id, type) ==
+		(ID := id;
+		Type := type;
+		);
+
+
+public Action : () ==> ()
+	Action() == (
+
+		if Animation`env.GetDetectionNouvelleMenace() 
+		then (
+			Animation`env.SetNouvelleMenace(false);
+			if Animation`env.GetDetectionTypeMenace() <> <NUL> 
+			then(
+			SystemeRTP`Pilote.addMenace({identifiantM |->  Animation`env.GetDetectionTypeMenace()});
+			identifiantM := identifiantM + 1    ;
+			)
+		)
+	)	
+
+		
+
+end Detecteur

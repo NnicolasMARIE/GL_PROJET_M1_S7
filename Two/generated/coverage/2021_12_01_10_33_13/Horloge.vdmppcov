@@ -1,0 +1,23 @@
+
+class Horloge
+--classe pour mod�liser l'horloge: base de temps
+instance variables
+--date courante:  horloge
+dateActuelle: nat := 0;
+
+values
+--p�riode de l'horloge: 1 unit� de temps
+periode : nat = 1;
+
+operations
+--cadencement de l'horloge
+public StepTime : () ==> ()
+StepTime() ==
+  dateActuelle:= dateActuelle + periode;
+
+--retourne  la date actuelle ?
+public GetTime : () ==> nat
+GetTime() ==
+  return dateActuelle;
+
+end Horloge

@@ -1,0 +1,81 @@
+class Contexte
+
+instance variables
+
+private envdistance: map nat to int := { |-> };
+
+private envlongitude: map nat to int := { |-> };
+
+private envlatitude: map nat to int := { |-> };
+
+private nouvelledet: bool := false;
+
+private typedet: Controleur`typeMenace := <NUL>;
+
+private MenaceEnv: map nat to Controleur`typeMenace := { |-> };
+
+operations
+
+
+public Contexte: () ==> Contexte
+  Contexte() == skip ;
+
+--operation lié aux capteur
+
+public Readdis: () ==> map nat to int
+	Readdis() ==
+		return envdistance;
+		
+public Readlat: () ==> map nat to int
+	Readlat() ==
+		return envlatitude;
+		
+public Readlon: () ==> map nat to int
+	Readlon() ==
+		return envlongitude;
+		
+public Setdis: (map nat to int) ==> ()
+	Setdis(dist) ==
+		envdistance := dist;
+		
+public Setlat: (map nat to int) ==> ()
+	Setlat(lat) == envlatitude := lat;
+		
+public Setlon: (map nat to int) ==> ()
+	Setlon(lon) == envlongitude := lon;	
+
+--operation lié aux detecteur
+
+public GetDetectionNouvelleMenace: () ==> bool
+	GetDetectionNouvelleMenace() ==
+		return nouvelledet;
+		
+public SetNouvelleMenace: (bool) ==> ()
+	SetNouvelleMenace(detect) ==
+		nouvelledet := detect;
+		
+public GetDetectionTypeMenace: () ==> Controleur`typeMenace
+	GetDetectionTypeMenace() ==
+		return typedet;
+		
+public SetTypeMenace: (Controleur`typeMenace) ==> ()
+	SetTypeMenace(detect) ==
+		typedet := detect;
+
+
+
+sync
+
+  mutex(Setdis);
+  mutex(Readdis, Setdis);
+  mutex(Setlat);
+  mutex(Readlat, Setlat);
+  mutex(Setlon);
+  mutex(Readlon, Setlon);
+    mutex(SetNouvelleMenace);
+  mutex(GetDetectionNouvelleMenace, SetNouvelleMenace);
+    mutex(SetTypeMenace);
+  mutex(GetDetectionTypeMenace, SetTypeMenace);
+
+
+end Contexte

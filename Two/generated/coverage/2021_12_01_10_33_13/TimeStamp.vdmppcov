@@ -1,0 +1,68 @@
+class TimeStamp
+values
+public pas : nat = 1;
+
+instance variables
+public dateActuelle  : nat   := 0;
+public tabReveil  : map nat to [nat] :=  { |->};
+public comptBarriere : nat1;
+
+operations
+
+public TimeStamp : nat1 ==> TimeStamp
+TimeStamp (compteur) ==
+	comptBarriere := compteur;
+
+public WaitRelatif : nat ==> ()
+WaitRelatif(val) ==
+  WaitAbsolu(dateActuelle + val);
+ 
+public WaitAbsolu : nat ==> ()
+WaitAbsolu(val) == (
+  AddAtabReveil(threadid, val);
+ leverBarriere();
+  enVeille();
+);
+
+ leverBarriere: () ==> ()
+ leverBarriere() == 
+(
+	while  (card dom tabReveil = comptBarriere ) do
+  	(
+  		dateActuelle := dateActuelle + pas;
+  		let lesThreads : set of nat = {td | td in set dom tabReveil
+  										 & tabReveil(td) <> nil and tabReveil(td) <= dateActuelle}
+		in
+			for all t in set lesThreads
+			do
+				tabReveil := {t} <-: tabReveil;
+	);
+)
+post forall td in set rng tabReveil & td = nil or td >= dateActuelle;
+
+AddAtabReveil : nat * [nat] ==> ()
+AddAtabReveil (tId, val) ==
+   tabReveil := tabReveil  ++ { tId |-> val };
+
+public NotifyThread : nat ==> ()
+NotifyThread(tId) ==
+tabReveil := {tId} <-: tabReveil;
+
+public GetTime : () ==> nat
+GetTime() ==
+  return dateActuelle;
+
+enVeille: () ==> ()
+enVeille() == skip;
+
+sync
+  per enVeille => threadid not in set dom tabReveil;
+  mutex(AddAtabReveil);
+  mutex(NotifyThread);
+  mutex(leverBarriere); 
+  mutex(AddAtabReveil , NotifyThread);
+  mutex(AddAtabReveil, leverBarriere);
+  mutex(NotifyThread, leverBarriere);
+   mutex(AddAtabReveil, NotifyThread, leverBarriere);
+
+end TimeStamp

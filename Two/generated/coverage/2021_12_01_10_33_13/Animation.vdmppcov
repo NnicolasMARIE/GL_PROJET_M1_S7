@@ -1,0 +1,48 @@
+class Animation
+
+
+instance variables
+--d�termine l'environnement
+private env			: Environnement;
+--cr�er un syst�me de synchronisation � barriere
+public static horloge	: TimeStamp := new TimeStamp(7);
+--d�termine le syst�me d'application
+private systemeRTP : SystemeRTP;
+
+
+
+operations
+
+public Animation: () ==> Animation
+Animation () ==
+-- instance SYSTEME D'ANIMATION
+ (
+    systemeRTP := new SystemeRTP();  
+    env := new Environnement("scenarioAnimation.txt", 1, true);
+ --lancer les threads de tous les acteurs 
+  start(systemeRTP.CapteurLatitude1);
+  start(systemeRTP.CapteurLongitude1);
+  start(systemeRTP.CapteurDistance1);
+  start(systemeRTP.Detecteur1);
+  start(systemeRTP.Pilote);
+  start(systemeRTP.ControleurDispenseur1);
+ );
+
+
+
+
+public Simuler: () ==> ()
+Simuler() ==
+ ( 
+ IO`print("\n Debut simulation");
+ --lancer la production des stimuli
+    start(env); 
+ -- attendre jusqu'au tarissement du flot de stimuli 
+    env.estFini();
+  -- afficher message fin  simulation 
+  IO`print("\n Simulation termin�e  � l'instant: ");
+  IO`print(horloge.GetTime());
+ );
+
+
+end Animation

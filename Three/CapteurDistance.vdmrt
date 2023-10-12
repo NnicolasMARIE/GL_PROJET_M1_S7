@@ -1,0 +1,40 @@
+class CapteurDistance is subclass of Capteur
+instance variables
+fini	: bool := false;
+
+operations
+
+public CapteurDistance: nat * Controleur`typeActeur * map nat to int  ==> CapteurDistance
+	CapteurDistance(id, type, val) ==
+		(ID := id;
+		Type := type;
+		Valeur := val;
+
+		);
+
+
+public Finir: () ==> ()
+Finir() ==
+  fini := true;
+
+public estFini: () ==> ()
+estFini() ==
+  skip;
+
+-- Action du Capteur:  "mesurer la Distance des missiles de l'environnement"
+public Action: () ==> ()
+	Action() ==
+		(Valeur := Animation`env.Readlat();
+		);
+		
+sync	
+  per estFini => fini;
+  
+thread
+
+periodic(1000E6,0,0,0) (Action) 
+
+
+
+
+end CapteurDistance

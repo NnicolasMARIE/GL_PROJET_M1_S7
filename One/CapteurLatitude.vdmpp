@@ -1,0 +1,16 @@
+class CapteurLatitude is subclass of Capteur
+--modelise un capteur de pression
+operations
+
+public CapteurLatitude: nat * Controleur`typeActeur * map nat to int ==> CapteurLatitude
+	CapteurLatitude(id, type, val) ==
+		(ID := id;
+		Type := type;
+		Valeur := val;
+		);
+-- Action du Capteur:  "mesurer la latitude des missiles de l'environnement"
+public Action: () ==> ()
+	Action() ==
+		(Valeur := Animation`env.Readlat();
+		);
+end CapteurLatitude

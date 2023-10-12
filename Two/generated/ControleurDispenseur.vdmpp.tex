@@ -1,0 +1,107 @@
+\kClass $ControleurDispenseur$
+\par
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}\kw{private}
+\assdef{ID}{\Nat }
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{Type}{Controleur`typeActeur}
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{ennemi}{\Lp \Nat  \Mult Controleur`typeMenace \Rp  \Mult \Lp \Int  \Mult \Int  \Mult \Int  \Rp }
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{act}{\Bool }[{\False }]
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{periode}{\Natone }[{1}]
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{estPeriodique}{\Bool }[{\True }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{Fini}{\Bool }[{\False }]
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{ControleurDispenseur}%
+\signature{\Nat  \Mult Controleur`typeActeur \Mult \Natone  \Mult \Bool  \Oto ControleurDispenseur}
+\parms{id,type,T,estPeriodic}
+\annlab[o]{ControleurDispenseur`ControleurDispenseur}
+\begin{blockstmt}
+\ass{ID}{id} ; \\
+\ass{Type}{type} ; \\
+\ass{periode}{T} ; \\
+\ass{estPeriodique}{estPeriodic}
+\end{blockstmt};
+\end{op}
+\kw{\kw{private}}\begin{op}[e]{Algo}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{ControleurDispenseur`Algo}
+\Skip ;
+\end{op}
+\kw{\kw{private}}\begin{op}[e]{Lancement}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{ControleurDispenseur`Lancement}
+\begin{blockstmt}
+\call{IO`print}{\Dquote {\backslash}n\hspace{0.5em}destruction\hspace{0.5em}du\hspace{0.5em}missile\hspace{0.5em}n: \Dquote } ; \\
+\call{IO`print}{ennemi.\#1.\#1} ; \\
+\call{IO`print}{\Dquote {\backslash}n\hspace{0.5em}de\hspace{0.5em}type\hspace{0.5em}: \Dquote } ; \\
+\call{IO`print}{ennemi.\#1.\#2}
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Action}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{ControleurDispenseur`Action}
+\begin{blockstmt}
+\If \pex{act \Equals \True }
+\Then \\
+\begin{blockstmt}
+\ass{act}{\False } ; \\
+\call{Algo}{} ; \\
+\call{Lancement}{} ; \\
+SystemeRTP`Pilote.\call{RmMenace}{ennemi.\#1.\#1}
+\end{blockstmt}
+\Fi
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{SetEnnemi}%
+\signature{\Lp \Lp \Nat  \Mult Controleur`typeMenace \Rp  \Mult \Lp \Int  \Mult \Int  \Mult \Int  \Rp  \Rp  \Oto ()}
+\parms{aAbatre}
+\annlab[o]{ControleurDispenseur`SetEnnemi}
+\begin{blockstmt}
+\ass{ennemi}{aAbatre} ; \\
+\ass{act}{\True }
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{estFini}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{ControleurDispenseur`estFini}
+\Skip ;
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Finir}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{ControleurDispenseur`Finir}
+\ass{Fini}{\True }
+\end{op}
+\kThreadDef
+\begin{thread}
+\begin{blockstmt}
+\begin{while}{\True }
+\begin{blockstmt}
+\call{Action}{} ; \\
+Animation`horloge.\call{WaitRelatif}{2}
+\end{blockstmt}
+\end{while}
+\end{blockstmt}
+\end{thread}
+\kSync
+\per{estFini}{Fini}
+\kEnd $ControleurDispenseur$
+

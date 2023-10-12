@@ -1,0 +1,71 @@
+\kClass $IO$
+\par
+\kTypes
+\type{\kw{public}\hspace{0.5em}filedirective}{\const{start} \TypeOr \const{append}}
+\kFunctions
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{writeval}%
+\signature[@p]{@p \Pto \Bool }
+\parms*{\Lp val\Rp }
+\annlab[o]{IO`writeval}
+\isnotyetspec;
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{fwriteval}%
+\signature[@p]{\seqof+{\Char } \Mult @p \Mult filedirective \Pto \Bool }
+\parms*{\Lp filename,val,fdir\Rp }
+\annlab[o]{IO`fwriteval}
+\isnotyetspec;
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{freadval}%
+\signature[@p]{\seqof+{\Char } \Pto \Bool  \Mult \Opt{@p}}
+\parms*{\Lp filename\Rp }
+\annlab[o]{IO`freadval}
+\isnotyetspec
+\begin{postcond}
+\begin{letexpr}
+\patdef{\reccons{\kw{mk\textunderscore}}{b,t}}{\RESULT}
+\end{letexpr} \\
+ \Not b \Implies t \Equals \Nil 
+\end{postcond}
+\end{fn}
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{echo}%
+\signature{\seqof*{\Char } \Oto \Bool }
+\parms{text}
+\annlab[o]{IO`echo}
+\call{fecho}{\Dquote  \Dquote ,text,\Nil };
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{fecho}%
+\signature{\seqof*{\Char } \Mult \seqof*{\Char } \Mult \Opt{filedirective} \Oto \Bool }
+\parms{filename,text,fdir}
+\annlab[o]{IO`fecho}
+\isnotyetspec
+\begin{precond}
+filename \Equals \Dquote  \Dquote  \Equiv fdir \Equals \Nil 
+\end{precond};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{ferror}%
+\signature{() \Oto \seqof*{\Char }}
+\parms{}
+\annlab[o]{IO`ferror}
+\isnotyetspec;
+\end{op}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{op}[e]{print}%
+\signature{ \Oto ()}
+\parms{arg}
+\annlab[o]{IO`print}
+\isnotyetspec;
+\end{op}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{op}[e]{println}%
+\signature{ \Oto ()}
+\parms{arg}
+\annlab[o]{IO`println}
+\isnotyetspec;
+\end{op}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{op}[e]{printf}%
+\signature{\seqof*{\Char } \Mult \seqof*{} \Oto ()}
+\parms{format,args}
+\annlab[o]{IO`printf}
+\isnotyetspec
+\end{op}
+\kEnd $IO$
+

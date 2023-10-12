@@ -1,0 +1,153 @@
+\kClass $MATH$
+\par
+\kFunctions
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{sin}%
+\signature{\Real  \To \Real }
+\parms*{\Lp v\Rp }
+\annlab[o]{MATH`sin}
+\isnotyetspec
+\begin{postcond}
+ \Abs \RESULT \Le 1
+\end{postcond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{cos}%
+\signature{\Real  \To \Real }
+\parms*{\Lp v\Rp }
+\annlab[o]{MATH`cos}
+\isnotyetspec
+\begin{postcond}
+ \Abs \RESULT \Le 1
+\end{postcond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{tan}%
+\signature{\Real  \Pto \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`tan}
+\isnotyetspec
+\begin{precond}
+\fnapply{cos}{a} \Neq 0
+\end{precond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{cot}%
+\signature{\Real  \Pto \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`cot}
+\isnotyetspec
+\begin{precond}
+\fnapply{sin}{a} \Neq 0
+\end{precond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{asin}%
+\signature{\Real  \Pto \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`asin}
+\isnotyetspec
+\begin{precond}
+ \Abs a \Le 1
+\end{precond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{acos}%
+\signature{\Real  \Pto \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`acos}
+\isnotyetspec
+\begin{precond}
+ \Abs a \Le 1
+\end{precond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{atan}%
+\signature{\Real  \To \Real }
+\parms*{\Lp v\Rp }
+\annlab[o]{MATH`atan}
+\isnotyetspec;
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{acot}%
+\signature{\Real  \To \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`acot}
+\fnapply{atan}{1 \NumDiv a}
+\begin{precond}
+a \Neq 0
+\end{precond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{sqrt}%
+\signature{\Real  \Pto \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`sqrt}
+\isnotyetspec
+\begin{precond}
+a \Ge 0
+\end{precond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{pi\hbox{\textunderscore}f}%
+\signature{() \To \Real }
+\parms*{\Lp \Rp }
+\annlab[o]{MATH`pi\hbox{\textunderscore}f}
+\isnotyetspec
+\end{fn}
+\kOperations
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{op}[e]{srand}%
+\signature{\Int  \Oto ()}
+\parms{a}
+\annlab[o]{MATH`srand}
+\begin{letstmt}
+\patdef{\DoNotCare}{\fnapply{MATH`srand2}{a}}
+\end{letstmt} \\
+\Skip 
+\begin{precond}
+a \Ge  \Uminus 1
+\end{precond};
+\end{op}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{op}[e]{rand}%
+\signature{\Int  \Oto \Int }
+\parms{a}
+\annlab[o]{MATH`rand}
+\isnotyetspec;
+\end{op}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{op}[e]{srand2}%
+\signature{\Int  \Oto \Int }
+\parms{a}
+\annlab[o]{MATH`srand2}
+\isnotyetspec
+\begin{precond}
+a \Ge  \Uminus 1
+\end{precond}
+\end{op}
+\kFunctions
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{exp}%
+\signature{\Real  \To \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`exp}
+\isnotyetspec;
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{ln}%
+\signature{\Real  \Pto \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`ln}
+\isnotyetspec
+\begin{precond}
+a \NumGt 0
+\end{precond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{log}%
+\signature{\Real  \Pto \Real }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`log}
+\isnotyetspec
+\begin{precond}
+a \NumGt 0
+\end{precond};
+\end{fn}
+\kw{\kw{public}\hspace{0.5em}\kw{static}}\begin{fn}[e]{fac}%
+\signature{\Nat  \Pto \Natone }
+\parms*{\Lp a\Rp }
+\annlab[o]{MATH`fac}
+\isnotyetspec
+\begin{precond}
+a \NumLt 21
+\end{precond}
+\end{fn}
+\kValues
+\kw{\kw{public}}\val{pi}{3.141593}
+\kEnd $MATH$
+

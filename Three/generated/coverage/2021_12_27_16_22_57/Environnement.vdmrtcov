@@ -1,0 +1,149 @@
+class Environnement
+
+types
+-- chaque donnée d'entrée: bool 
+public data    = nat * bool * Controleur`typeMenace * nat * int * int * int 
+
+
+instance variables
+
+private io       : IO := new IO();
+private datas     : seq of data := [];
+private DureeSimulation :nat := 0;
+
+private fini :bool := false;
+
+
+
+private envdistance: map nat to int := { |-> };
+private envlongitude: map nat to int := { |-> };
+private envlatitude: map nat to int := { |-> };
+private nouvelledet: bool := false;
+private typedet: Controleur`typeMenace := <NUL>;
+private MenaceEnv: map nat to Controleur`typeMenace := { |-> };
+
+
+operations
+
+
+--permet de saisir la séquence de  données renvoyées par les capteurs (simulateur)  et la durée totale de la simulation
+public Environnement: seq of char  ==> Environnement
+  Environnement(fichierData) ==
+   (
+    let mk_ (-,mk_(t,input)) = io.freadval[nat * seq of data](fichierData) -- lecture des données  à partir d'un fichier "fichierData" 
+    in
+     (datas := input;            -- chargement de la séquence des données lues dans la liste "Datas"
+      DureeSimulation := t;      -- durée de simulation prévue
+     );
+      
+   --MonSysteme := new SystemeRTP();
+
+   );
+
+
+--operation lié aux capteur
+
+public Readdis: () ==> map nat to int
+	Readdis() ==
+		return envdistance;
+		
+public Readlat: () ==> map nat to int
+	Readlat() ==
+		return envlatitude;
+		
+public Readlon: () ==> map nat to int
+	Readlon() ==
+		return envlongitude;
+		
+public Setdis: (map nat to int) ==> ()
+	Setdis(dist) ==
+		envdistance := dist;
+		
+public Setlat: (map nat to int) ==> ()
+	Setlat(lat) == envlatitude := lat;
+		
+public Setlon: (map nat to int) ==> ()
+	Setlon(lon) == envlongitude := lon;	
+--operation lié aux detecteur
+
+public GetDetectionNouvelleMenace: () ==> bool
+	GetDetectionNouvelleMenace() ==
+		return nouvelledet;
+		
+public SetNouvelleMenace: (bool) ==> ()
+	SetNouvelleMenace(detect) ==
+		nouvelledet := detect;
+		
+public GetDetectionTypeMenace: () ==> Controleur`typeMenace
+	GetDetectionTypeMenace() ==
+		return typedet;
+		
+public SetTypeMenace: (Controleur`typeMenace) ==> ()
+	SetTypeMenace(detect) ==
+		typedet := detect;
+
+
+
+
+
+
+
+
+
+public estFini: () ==> ()
+estFini() ==
+  skip;
+  
+public Finir: () ==> ()
+Finir
+() ==
+  fini:= true;
+
+
+--stimuli :   environnement ---> système de régulation (pilote)
+private stimuli: () ==> ()
+stimuli() ==
+ (if len datas > 0
+  then (dcl dateActuelle : nat := time;
+  let mk_(date,Ndetect , Me , id , dis , lon , lat) = hd datas 
+  in
+   (if date <= dateActuelle
+    then (
+		
+		  Animation`env.Setdis({id|->dis});
+		  Animation`env.Setlon({id|->lon});
+      Animation`env.Setlat({id|->lat});    
+      Animation`env.SetNouvelleMenace(Ndetect);
+		  Animation`env.SetTypeMenace(Me);
+		  datas := tl datas;
+          return
+         );
+         );
+  )
+  else (fini := true;
+        return
+       );
+ );
+
+
+sync
+
+  mutex(Setdis);
+  mutex(Readdis, Setdis);
+  mutex(Setlat);
+  mutex(Readlat, Setlat);
+  mutex(Setlon);
+  mutex(Readlon, Setlon);
+  mutex(SetNouvelleMenace);
+  mutex(GetDetectionNouvelleMenace, SetNouvelleMenace);
+  mutex(SetTypeMenace);
+  mutex(GetDetectionTypeMenace, SetTypeMenace);
+  per estFini => fini;
+
+thread
+-- periode du thread (period, jitter, delay, offset)
+periodic(1000E6,0,0,0) (stimuli)
+ 
+
+
+end Environnement

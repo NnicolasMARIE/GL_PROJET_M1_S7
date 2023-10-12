@@ -1,0 +1,25 @@
+class Animation
+
+--cette classe qui fait interagir les diferents composants du syst�me: 
+--elle lance la simulation (test de validation dynamique)
+instance variables
+--crée un environnement: "env" qui produit des stimuli selon le  scenario décrit dans le fichier "scenario.txt"
+static public env : Environnement := new Environnement("scenarioAnimation.txt");
+
+--crée une instance de la base de temps(horloge): horloge= temp de référence
+static public horloge : Horloge := new Horloge(); 
+--static public systemeRTP :SystemeRTP := new SystemeRTP ()
+
+operations
+
+public Animer: () ==> ()
+Animer() ==
+ (-- activer environment pour créer un stimuli
+  IO`print("\n Animation demarrée  à l'instant: ");
+  IO`print(horloge.GetTime());
+  env.produireStimuli();
+  IO`print("\n Animation terminée  à l'instant: ");
+  IO`print(horloge.GetTime());
+  
+ );
+end Animation

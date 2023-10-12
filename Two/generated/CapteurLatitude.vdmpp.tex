@@ -1,0 +1,55 @@
+\kClass $CapteurLatitude$ \kISO $Capteur$
+\par
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}
+\assdef{fini}{\Bool }[{\False }]
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{CapteurLatitude}%
+\signature{\Nat  \Mult Controleur`typeActeur \Mult \mapof{\Nat \Gmap \Int } \Mult Contexte \Mult \Natone  \Mult \Bool  \Oto CapteurLatitude}
+\parms{id,type,val,envir,p,isP}
+\annlab[o]{CapteurLatitude`CapteurLatitude}
+\begin{blockstmt}
+\ass{ID}{id} ; \\
+\ass{Type}{type} ; \\
+\ass{Valeur}{val} ; \\
+\ass{Env}{envir} ; \\
+\ass{periode}{p} ; \\
+\ass{estPeriodique}{isP}
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Finir}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{CapteurLatitude`Finir}
+\ass{fini}{\True };
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{estFini}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{CapteurLatitude`estFini}
+\Skip ;
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Action}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{CapteurLatitude`Action}
+\begin{blockstmt}
+\ass{Valeur}{\fnapply{SystemeRTP`leContexte.Readlat}{}}
+\end{blockstmt}
+\end{op}
+\kThreadDef
+\begin{thread}
+\begin{while}{\True }
+\begin{blockstmt}
+\call{Action}{} ; \\
+Animation`horloge.\call{WaitRelatif}{5}
+\end{blockstmt}
+\end{while}
+\end{thread}
+\kSync
+\per{estFini}{fini}
+\kEnd $CapteurLatitude$
+

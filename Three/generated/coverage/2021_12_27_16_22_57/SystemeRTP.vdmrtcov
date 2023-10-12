@@ -1,0 +1,67 @@
+system SystemeRTP
+-- classe qui configure le systeme: Pilote + 3 capteur + dispenseur + detecteur
+
+
+
+
+
+
+--
+--rajout CPU 3cpu capteur 1cpu detecteur 1cpu controleurdispenseur 1cpu pilote
+--
+instance variables
+  ---1 cpu pilote
+              cpu1 : CPU := new CPU(<FCFS>, 1E6);
+  ---3 cpu capteur 
+              cpu2 : CPU := new CPU(<FCFS>, 1E6);
+              cpu3 : CPU := new CPU(<FCFS>, 1E6);
+              cpu4 : CPU := new CPU(<FCFS>, 1E6);
+  ---1 cpu detecteur
+              cpu5 : CPU := new CPU(<FCFS>, 1E6);
+  ---1 cpu controleurdispenseur
+              cpu6 : CPU := new CPU(<FCFS>, 1E6);
+
+
+  -- bus connexion pilote avec les capteurs, le detecteur et le controleur dispenseur
+  bus1 : BUS := new BUS(<FCFS>, 1E3, {cpu1, cpu2, cpu3, cpu4, cpu5, cpu6 });
+
+
+---supression passage contexte et caract de thread
+
+
+
+
+--cree des instances "public static" pour permettre l'acces a partir de toutes les classes du modele  
+public static Pilote	: Controleur := new Controleur();  -- un seul systeme de pilotage qui 
+public static CapteurLatitude1	: CapteurLatitude := new CapteurLatitude(1, <CAPTEUR_LATITUDE>,{|->});  -- un seul capteur de latitude
+public static CapteurLongitude1	: CapteurLongitude := new CapteurLongitude(2, <CAPTEUR_LONGITUDE>,{|->});  -- un seul capteur de longitude
+public static CapteurDistance1	: CapteurDistance := new CapteurDistance(3, <CAPTEUR_DISTANCE>, {|->}); -- un seul capteur de distance
+public static ControleurDispenseur1	: ControleurDispenseur := new ControleurDispenseur(4, <CONTROLEUR_DISPENSEUR>); -- un seul dispenseur
+public static Detecteur1	: Detecteur := new Detecteur(5, <DETECTEUR>); -- un seul detecteur
+
+operations
+
+public SystemeRTP: () ==> SystemeRTP
+SystemeRTP() ==
+ -- d�ploiement des threads sur la plate forme cpu comme suit:
+          (
+-- on d�ploie le Pilote sur cpu1
+          cpu1.deploy(Pilote);
+-- on d�ploie CapteurTemperature1 sur cpu2        
+          cpu2.deploy(CapteurLatitude1);
+
+-- on d�ploie RegulateurTemperature1 sur cpu3       
+          cpu3.deploy(CapteurDistance1);
+-- on d�ploie RegulateurPression1 sur cpu4           
+          cpu4.deploy(CapteurLongitude1 );
+-- on d�ploie RegulateurPression1 sur cpu5            
+          cpu5.deploy(Detecteur1);
+
+
+-- on d�ploie RegulateurPression1 sur cpu4           
+          cpu6.deploy(ControleurDispenseur1);           
+           );
+
+
+
+end SystemeRTP

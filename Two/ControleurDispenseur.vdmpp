@@ -1,0 +1,76 @@
+class ControleurDispenseur
+
+instance variables
+
+private ID: nat;
+private Type: Controleur`typeActeur;
+private ennemi: (nat*Controleur`typeMenace) * (int*int*int);
+private act :bool := false;
+protected periode : nat1 := 1;
+protected estPeriodique : bool := true;
+private Fini		: bool:=false; 
+
+
+
+
+
+operations
+
+public ControleurDispenseur: nat * Controleur`typeActeur * nat1 * bool ==> ControleurDispenseur
+	ControleurDispenseur(id,type,T,estPeriodic) ==
+		(  
+			ID:= id;
+			Type:= type;
+			periode :=T;
+  			estPeriodique :=estPeriodic
+		);
+		
+private Algo: () ==> ()
+	Algo() ==
+		skip;
+
+private Lancement: () ==> ()
+	Lancement() ==
+	(
+		IO`print("\n destruction du missile n:");
+		IO`print(ennemi.#1.#1);
+		IO`print("\n de type :");
+		IO`print(ennemi.#1.#2);
+	);
+public Action: () ==> ()
+	Action() == (
+		if (act=true)
+		then(
+		act:=false;
+		Algo();
+		Lancement();
+		--si le lancement echou pour une raison quelquonque l'action est annulée est la menace n'est pas retiré de la liste 
+		SystemeRTP`Pilote.RmMenace(ennemi.#1.#1);
+		)
+
+	);
+public SetEnnemi :((nat*Controleur`typeMenace) * (int*int*int)) ==>()
+	SetEnnemi(aAbatre) == (
+		ennemi:= aAbatre;
+		act:= true;
+	);
+
+public estFini: () ==> ()
+estFini() == 
+  skip;
+
+public Finir: () ==> ()
+Finir() == 
+  Fini := true;
+thread
+ (while true 
+  do
+   (Action();
+   Animation`horloge.WaitRelatif(2);
+   )
+ )
+
+sync
+per estFini => Fini;
+
+end ControleurDispenseur

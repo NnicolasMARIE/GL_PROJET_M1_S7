@@ -1,0 +1,16 @@
+class CapteurDistance is subclass of Capteur
+--modelise un capteur de pression
+operations
+
+public CapteurDistance: nat * Controleur`typeActeur * map nat to int ==> CapteurDistance
+	CapteurDistance(id, type, val) ==
+		(ID := id;
+		Type := type;
+		Valeur := val;
+		);
+-- Action du Capteur:  "mesurer la latitude des missiles de l'environnement"
+public Action: () ==> ()
+	Action() ==
+		(Valeur := Animation`env.Readdis();
+		);
+end CapteurDistance

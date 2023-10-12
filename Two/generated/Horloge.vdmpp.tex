@@ -1,0 +1,25 @@
+\kClass $Horloge$
+\par
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}
+\assdef{dateActuelle}{\Nat }[{0}]
+\end{insvar}
+\par
+\kValues
+\kw{}\val{periode}[\Nat ]{1}
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{StepTime}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Horloge`StepTime}
+\ass{dateActuelle}{dateActuelle \Plus periode};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{GetTime}%
+\signature{() \Oto \Nat }
+\parms{}
+\annlab[o]{Horloge`GetTime}
+\return{dateActuelle}
+\end{op}
+\kEnd $Horloge$
+

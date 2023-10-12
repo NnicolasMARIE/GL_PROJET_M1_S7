@@ -1,0 +1,96 @@
+\kClass $TimeStamp$
+\par
+\kValues
+\kw{\kw{public}}\val{pas}[\Nat ]{1}
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}\kw{public}
+\assdef{dateActuelle}{\Nat }[{0}]
+\end{insvar}
+\begin{insvar}\kw{public}
+\assdef{tabReveil}{\mapof{\Nat \Gmap \Opt{\Nat }}}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{public}
+\assdef{comptBarriere}{\Natone }
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{TimeStamp}%
+\signature{\Natone  \Oto TimeStamp}
+\parms{compteur}
+\annlab[o]{TimeStamp`TimeStamp}
+\ass{comptBarriere}{compteur};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{WaitRelatif}%
+\signature{\Nat  \Oto ()}
+\parms{val}
+\annlab[o]{TimeStamp`WaitRelatif}
+\call{WaitAbsolu}{dateActuelle \Plus val};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{WaitAbsolu}%
+\signature{\Nat  \Oto ()}
+\parms{val}
+\annlab[o]{TimeStamp`WaitAbsolu}
+\begin{blockstmt}
+\call{AddAtabReveil}{\kw{threadid},val} ; \\
+\call{leverBarriere}{} ; \\
+\call{enVeille}{}
+\end{blockstmt};
+\end{op}
+\begin{op}[e]{leverBarriere}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{TimeStamp`leverBarriere}
+\begin{blockstmt}
+\begin{while}{\pex{ \Card  \Dom tabReveil \Equals comptBarriere}}
+\begin{blockstmt}
+\ass{dateActuelle}{dateActuelle \Plus pas} ; \\
+\begin{letstmt}
+\patdef{lesThreads : \setof{\Nat }}{\setcomp{td}{td \In  \Dom tabReveil} \\
+[\fnapply{tabReveil}{td} \Neq \Nil  \And \fnapply{tabReveil}{td} \Le dateActuelle]}
+\end{letstmt} \\
+\begin{setfor}{t}{lesThreads}
+\ass{tabReveil}{\set{t} \Dby tabReveil}
+\end{setfor}
+\end{blockstmt}
+\end{while}
+\end{blockstmt}
+\begin{postcond}
+\all{td \In  \Rng tabReveil}{td \Equals \Nil  \Or td \Ge dateActuelle}
+\end{postcond};
+\end{op}
+\begin{op}[e]{AddAtabReveil}%
+\signature{\Nat  \Mult \Opt{\Nat } \Oto ()}
+\parms{tId,val}
+\annlab[o]{TimeStamp`AddAtabReveil}
+\ass{tabReveil}{tabReveil \Override \map{tId \Mapsto val}};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{NotifyThread}%
+\signature{\Nat  \Oto ()}
+\parms{tId}
+\annlab[o]{TimeStamp`NotifyThread}
+\ass{tabReveil}{\set{tId} \Dby tabReveil};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{GetTime}%
+\signature{() \Oto \Nat }
+\parms{}
+\annlab[o]{TimeStamp`GetTime}
+\return{dateActuelle};
+\end{op}
+\begin{op}[e]{enVeille}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{TimeStamp`enVeille}
+\Skip 
+\end{op}
+\kSync
+\per{enVeille}{\kw{threadid} \Notin  \Dom tabReveil;}
+\mutex{AddAtabReveil};
+\mutex{NotifyThread};
+\mutex{leverBarriere};
+\mutex{AddAtabReveil,NotifyThread};
+\mutex{AddAtabReveil,leverBarriere};
+\mutex{NotifyThread,leverBarriere};
+\mutex{AddAtabReveil,NotifyThread,leverBarriere}
+\kEnd $TimeStamp$
+

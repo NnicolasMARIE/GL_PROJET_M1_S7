@@ -1,0 +1,86 @@
+
+class Controleur
+-- classe pour modeliser le "controleur": pilote qui r�alise l'asservissement
+
+types   
+--type des acteurs
+public typeActeur 	= <CAPTEUR_DISTANCE> | <CAPTEUR_LONGITUDE>  | <CAPTEUR_LATITUDE> | <DETECTEUR>| <DISPENSEUR> | <CONTROLEUR_DISPENSEUR>| <NUL> ;
+--
+public typeMenace = <A> | <B> | <C> | <NUL>;
+
+
+instance variables
+
+
+private Fini		: bool:=false; 
+private ListeActeur	: map nat to typeActeur := { |-> };
+private ListeMenace : map nat to typeMenace := { |-> };
+private ListeLongitude : map nat to int := { |-> };
+private ListeLatitude : map nat to int := { |-> };
+private ListeDistance : map nat to int := { |-> };
+private ListeMenacesXPositions : map (nat*typeMenace) to (int*int*int) := { |-> };
+
+
+
+operations
+-- 
+-- permet de fixer les consignes   qui sont pass�es en param�tres: au moment de l'instantiation � partir de la classe centrale SYSTEMERTP
+
+public addMenace: (map nat to typeMenace) ==> ()
+	addMenace(nouvelleMenace) == 
+		ListeMenace := ListeMenace ++ nouvelleMenace;
+
+public RmMenace: (nat) ==> ()
+	RmMenace(id) ==
+		ListeMenace := {id} <-: ListeMenace;
+
+
+public Controleur: () ==> Controleur
+	Controleur() == skip;
+
+
+
+
+
+public MiseAjour: () ==> ()
+	MiseAjour() == (
+		ListeLongitude := SystemeRTP`CapteurLongitude1.ReadValeur();
+		ListeLatitude := SystemeRTP`CapteurLatitude1.ReadValeur();
+		ListeDistance := SystemeRTP`CapteurDistance1.ReadValeur();
+		ListeMenacesXPositions := { |-> };
+		let missile : set of nat = {td | td in set dom ListeMenace}
+										   in
+            for all m in set missile
+            do
+                ListeMenacesXPositions := ListeMenacesXPositions ++ {mk_(m , ListeMenace(m) )|->mk_(ListeDistance(m),ListeLongitude(m),ListeLatitude(m))};
+	);
+
+
+
+
+--algorithme determiant la destruction d'un missile 
+private Algorithme: () ==> ()
+	Algorithme() ==(skip);
+
+
+public estFini: () ==> ()
+estFini() == 
+  skip;
+
+public Finir: () ==> ()
+Finir() == 
+  Fini := true;
+  
+
+public Action: ()==> ()
+	Action() == (
+		MiseAjour();
+		Algorithme();
+		for all m in set dom ListeMenacesXPositions do
+			SystemeRTP`ControleurDispenseur1.SetEnnemi(mk_(m,ListeMenacesXPositions(m)));
+	);
+thread
+
+periodic(1000E6,0,0,0) (Action)
+
+end Controleur

@@ -1,0 +1,103 @@
+\kClass $Contexte$
+\par
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}\kw{private}
+\assdef{envdistance}{\mapof{\Nat \Gmap \Int }}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{envlongitude}{\mapof{\Nat \Gmap \Int }}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{envlatitude}{\mapof{\Nat \Gmap \Int }}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{nouvelledet}{\Bool }[{\False }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{typedet}{Controleur`typeMenace}[{\const{NUL}}]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{MenaceEnv}{\mapof{\Nat \Gmap Controleur`typeMenace}}[{\Emptymap }]
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{Contexte}%
+\signature{() \Oto Contexte}
+\parms{}
+\annlab[o]{Contexte`Contexte}
+\Skip ;
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Readdis}%
+\signature{() \Oto \mapof{\Nat \Gmap \Int }}
+\parms{}
+\annlab[o]{Contexte`Readdis}
+\return{envdistance};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Readlat}%
+\signature{() \Oto \mapof{\Nat \Gmap \Int }}
+\parms{}
+\annlab[o]{Contexte`Readlat}
+\return{envlatitude};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Readlon}%
+\signature{() \Oto \mapof{\Nat \Gmap \Int }}
+\parms{}
+\annlab[o]{Contexte`Readlon}
+\return{envlongitude};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Setdis}%
+\signature{\Lp \mapof{\Nat \Gmap \Int } \Rp  \Oto ()}
+\parms{dist}
+\annlab[o]{Contexte`Setdis}
+\ass{envdistance}{dist};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Setlat}%
+\signature{\Lp \mapof{\Nat \Gmap \Int } \Rp  \Oto ()}
+\parms{lat}
+\annlab[o]{Contexte`Setlat}
+\ass{envlatitude}{lat};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Setlon}%
+\signature{\Lp \mapof{\Nat \Gmap \Int } \Rp  \Oto ()}
+\parms{lon}
+\annlab[o]{Contexte`Setlon}
+\ass{envlongitude}{lon};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{GetDetectionNouvelleMenace}%
+\signature{() \Oto \Bool }
+\parms{}
+\annlab[o]{Contexte`GetDetectionNouvelleMenace}
+\return{nouvelledet};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{SetNouvelleMenace}%
+\signature{\Lp \Bool  \Rp  \Oto ()}
+\parms{detect}
+\annlab[o]{Contexte`SetNouvelleMenace}
+\ass{nouvelledet}{detect};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{GetDetectionTypeMenace}%
+\signature{() \Oto Controleur`typeMenace}
+\parms{}
+\annlab[o]{Contexte`GetDetectionTypeMenace}
+\return{typedet};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{SetTypeMenace}%
+\signature{\Lp Controleur`typeMenace \Rp  \Oto ()}
+\parms{detect}
+\annlab[o]{Contexte`SetTypeMenace}
+\ass{typedet}{detect}
+\end{op}
+\kSync
+\mutex{Setdis};
+\mutex{Readdis,Setdis};
+\mutex{Setlat};
+\mutex{Readlat,Setlat};
+\mutex{Setlon};
+\mutex{Readlon,Setlon};
+\mutex{SetNouvelleMenace};
+\mutex{GetDetectionNouvelleMenace,SetNouvelleMenace};
+\mutex{SetTypeMenace};
+\mutex{GetDetectionTypeMenace,SetTypeMenace}
+\kEnd $Contexte$
+

@@ -1,0 +1,50 @@
+\kClass $Capteur$
+\par
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}\kw{protected}
+\assdef{ID}{\Nat }
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{Type}{Controleur`typeActeur}
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{Valeur}{\mapof{\Nat \Gmap \Int }}
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{Env}{Contexte}
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{periode}{\Natone }[{1}]
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{estPeriodique}{\Bool }[{\True }]
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{GetID}%
+\signature{() \Oto \Nat }
+\parms{}
+\annlab[o]{Capteur`GetID}
+\return{ID};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{GetType}%
+\signature{() \Oto Controleur`typeActeur}
+\parms{}
+\annlab[o]{Capteur`GetType}
+\return{Type};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{ReadValeur}%
+\signature{() \Oto \mapof{\Nat \Gmap \Int }}
+\parms{}
+\annlab[o]{Capteur`ReadValeur}
+\return{Valeur};
+\end{op}
+\kw{\kw{protected}}\begin{op}[e]{Action}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Capteur`Action}
+\issubclassresp
+\end{op}
+\kEnd $Capteur$
+

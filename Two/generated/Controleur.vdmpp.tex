@@ -1,0 +1,119 @@
+\kClass $Controleur$
+\par
+\kTypes
+\type{\kw{public}\hspace{0.5em}typeActeur}{\const{CAPTEUR\hbox{\textunderscore}DISTANCE} \TypeOr \const{CAPTEUR\hbox{\textunderscore}LONGITUDE} \TypeOr \const{CAPTEUR\hbox{\textunderscore}LATITUDE} \TypeOr \const{DETECTEUR} \TypeOr \const{DISPENSEUR} \TypeOr \const{CONTROLEUR\hbox{\textunderscore}DISPENSEUR} \TypeOr \const{NUL};}
+\type{\kw{public}\hspace{0.5em}typeMenace}{\const{A} \TypeOr \const{B} \TypeOr \const{C} \TypeOr \const{NUL}}
+\kInstanceVarDef
+\parlinebr
+\begin{insvar}\kw{protected}
+\assdef{periode}{\Natone }[{1}]
+\end{insvar}
+\begin{insvar}\kw{protected}
+\assdef{estPeriodique}{\Bool }[{\True }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{Fini}{\Bool }[{\False }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{ListeActeur}{\mapof{\Nat \Gmap typeActeur}}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{ListeMenace}{\mapof{\Nat \Gmap typeMenace}}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{ListeLongitude}{\mapof{\Nat \Gmap \Int }}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{ListeLatitude}{\mapof{\Nat \Gmap \Int }}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{ListeDistance}{\mapof{\Nat \Gmap \Int }}[{\Emptymap }]
+\end{insvar}
+\begin{insvar}\kw{private}
+\assdef{ListeMenacesXPositions}{\mapof{\Lp \Nat  \Mult typeMenace \Rp \Gmap \Lp \Int  \Mult \Int  \Mult \Int  \Rp }}[{\Emptymap }]
+\end{insvar}
+\par
+\kOperations
+\kw{\kw{public}}\begin{op}[e]{addMenace}%
+\signature{\Lp \mapof{\Nat \Gmap typeMenace} \Rp  \Oto ()}
+\parms{nouvelleMenace}
+\annlab[o]{Controleur`addMenace}
+\ass{ListeMenace}{ListeMenace \Override nouvelleMenace};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{RmMenace}%
+\signature{\Lp \Nat  \Rp  \Oto ()}
+\parms{id}
+\annlab[o]{Controleur`RmMenace}
+\ass{ListeMenace}{\set{id} \Dby ListeMenace};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Controleur}%
+\signature{\Natone  \Mult \Bool  \Oto Controleur}
+\parms{T,estPeriodic}
+\annlab[o]{Controleur`Controleur}
+\begin{blockstmt}
+\ass{periode}{T} ; \\
+\ass{estPeriodique}{estPeriodic}
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{MiseAjour}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Controleur`MiseAjour}
+\begin{blockstmt}
+\ass{ListeLongitude}{\fnapply{SystemeRTP`CapteurLongitude1.ReadValeur}{}} ; \\
+\ass{ListeLatitude}{\fnapply{SystemeRTP`CapteurLatitude1.ReadValeur}{}} ; \\
+\ass{ListeDistance}{\fnapply{SystemeRTP`CapteurDistance1.ReadValeur}{}} ; \\
+\ass{ListeMenacesXPositions}{\Emptymap } ; \\
+\begin{letstmt}
+\patdef{missile : \setof{\Nat }}{\setcomp{td}{td \In  \Dom ListeMenace}}
+\end{letstmt} \\
+\begin{setfor}{m}{missile}
+\ass{ListeMenacesXPositions}{ListeMenacesXPositions \Override \map{\reccons{\kw{mk\textunderscore}}{m,\fnapply{ListeMenace}{m}} \Mapsto \reccons{\kw{mk\textunderscore}}{\fnapply{ListeDistance}{m},\fnapply{ListeLongitude}{m},\fnapply{ListeLatitude}{m}}}}
+\end{setfor}
+\end{blockstmt};
+\end{op}
+\kw{\kw{private}}\begin{op}[e]{Algorithme}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Controleur`Algorithme}
+\begin{blockstmt}
+\Skip 
+\end{blockstmt};
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{estFini}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Controleur`estFini}
+\Skip ;
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Finir}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Controleur`Finir}
+\ass{Fini}{\True };
+\end{op}
+\kw{\kw{public}}\begin{op}[e]{Action}%
+\signature{() \Oto ()}
+\parms{}
+\annlab[o]{Controleur`Action}
+\begin{blockstmt}
+\call{MiseAjour}{} ; \\
+\call{Algorithme}{} ; \\
+\begin{setfor}{m}{ \Dom ListeMenacesXPositions}
+SystemeRTP`ControleurDispenseur1.\call{SetEnnemi}{\reccons{\kw{mk\textunderscore}}{m,\fnapply{ListeMenacesXPositions}{m}}}
+\end{setfor}
+\end{blockstmt}
+\end{op}
+\kThreadDef
+\begin{thread}
+\begin{blockstmt}
+\begin{while}{\True }
+\begin{blockstmt}
+\call{Action}{} ; \\
+Animation`horloge.\call{WaitRelatif}{3}
+\end{blockstmt}
+\end{while}
+\end{blockstmt}
+\end{thread}
+\kEnd $Controleur$
+
